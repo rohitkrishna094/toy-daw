@@ -3,43 +3,70 @@ import Tone from 'tone';
 import { mapping } from './keymapping';
 import './App.css';
 
-const pressedKeys = keyMap => {
-  let res = [];
-  for (let key in keyMap) {
-    if (keyMap[key]) res.push(key);
-  }
-  return res;
-};
-
 class App extends Component {
+  constructor(props) {
+    super(props);
+    const octaveOffset = -1;
+    const synth = new Tone.PolySynth(6, Tone.Synth, {
+      oscillator: {
+        // type: 'sine'
+      }
+    }).toMaster();
+    this.state = { keyMap: {}, synth, octaveOffset, noteMap: mapping(octaveOffset) };
+  }
+
   componentDidMount() {
     document.addEventListener('keydown', this.onKeyDown);
     document.addEventListener('keyup', this.onKeyUp);
   }
 
-  state = { keyMap: {} };
-
   onKeyDown = e => {
-    // e.preventDefault();
-    this.setState({ ...this.state, keyMap: { ...this.state.keyMap, [e.key]: true } });
+    const { keyMap } = this.state;
+    const key = e.key.toUpperCase();
+
+    if (key in keyMap && keyMap[key]) {
+    } else {
+      this.sing(key);
+    }
+
+    this.setState({ ...this.state, keyMap: { ...keyMap, [key]: true } });
   };
+
   onKeyUp = e => {
-    // e.preventDefault();
-    this.setState({ ...this.state, keyMap: { ...this.state.keyMap, [e.key]: false } });
+    const key = e.key.toUpperCase();
+    this.setState({ ...this.state, keyMap: { ...this.state.keyMap, [key]: false } });
   };
 
-  sing = () => {
-    //create a synth and connect it to the master output (your speakers)
-    const synth = new Tone.Synth().toMaster();
+  sing = letter => {
+    const { synth } = this.state;
+    const { noteMap } = this.state;
+    if (letter.toUpperCase() in noteMap) {
+      const note = noteMap[letter];
+      synth.triggerAttackRelease(note, '8n');
+    }
+  };
 
-    //play a middle 'C' for the duration of an 8th note
-    synth.triggerAttackRelease('C4', '8n');
+  pressedKeys = keyMap => {
+    let res = [];
+    for (let key in keyMap) {
+      if (keyMap[key]) res.push(key);
+    }
+    return res;
+  };
+
+  pressedNotes = keyMap => {
+    let res = [];
+    const { noteMap } = this.state;
+    for (let key in keyMap) {
+      if (keyMap[key] && noteMap[key]) res.push(noteMap[key]);
+    }
+    return res;
   };
 
   render() {
     return (
       <div className="App">
-        <h1>Currently Playing {JSON.stringify(pressedKeys(this.state.keyMap))}</h1>
+        <h1>Currently Playing {JSON.stringify(this.pressedNotes(this.state.keyMap))}</h1>
       </div>
     );
   }
