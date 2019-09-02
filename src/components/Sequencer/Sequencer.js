@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Tone from 'tone';
 import Nexus from 'nexusui';
+import { delay } from '../../utils/index';
 import './Sequencer.css';
-import { formatResultsErrors } from 'jest-message-util';
 
 class Sequencer extends Component {
   constructor(props) {
@@ -28,8 +28,7 @@ class Sequencer extends Component {
     sequencer.colorize('fill', '#51575B');
     sequencer.colorize('accent', '#AABAC4');
 
-    const current = this.seqRef.current;
-    const rects = current.getElementsByTagName('rect');
+    const rects = this.seqRef.current.getElementsByTagName('rect');
 
     for (let i = 0; i < rects.length; i++) {
       const rem = Math.floor(i / 4);
@@ -44,10 +43,15 @@ class Sequencer extends Component {
 
     sequencer.on('change', v => {
       console.log(v);
-    });
-
-    sequencer.on('step', v => {
-      console.log(v);
+      if (v.state === false) {
+        const sum = v.row * 16 + v.column;
+        const rem = Math.floor(sum / 4);
+        if (rem % 2 === 1) {
+          setTimeout(() => {
+            rects[sum].setAttribute('fill', '#6C5B5C');
+          }, 0);
+        }
+      }
     });
 
     document.documentElement.addEventListener('mousedown', () => {
