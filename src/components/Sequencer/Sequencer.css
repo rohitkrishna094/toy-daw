@@ -4,14 +4,19 @@
   margin-left: 100px;
 }
 
-.sequencer_labels {
+.sequencer_side {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  flex-basis: 0;
   color: #d9d6d6;
   font-size: 14px;
   margin-right: 5px;
+}
+
+.sequencer_side_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .sequencer_label {
@@ -24,7 +29,14 @@
   cursor: pointer;
 }
 
-rect {
-  -webkit-filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7));
-  filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7));
+.sequencer_indicator {
+  margin-left: 10px;
+  width: 5px;
+  height: 25px;
+  background-color: #4d565b;
+}
+
+.sequencer_side_container:first-child .sequencer_indicator {
+  /* background-color: #a8e44a; */
+  border: 1px solid #a8e44a;
 }

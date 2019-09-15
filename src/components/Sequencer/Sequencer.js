@@ -15,7 +15,22 @@ class Sequencer extends Component {
     gain.toMaster();
     synths.forEach(synth => synth.connect(gain));
 
-    this.state = { index: 0, synths, boxes: {}, sequencer: null };
+    const player = new Tone.Players(
+      {
+        kick: 'https://raw.githubusercontent.com/Tonejs/Tone.js/dev/examples/audio/505/kick.mp3',
+        snare: 'https://raw.githubusercontent.com/Tonejs/Tone.js/dev/examples/audio/505/snare.ogg',
+        closedHiHate: 'https://raw.githubusercontent.com/Tonejs/Tone.js/dev/examples/audio/505/hh.mp3',
+        openHiHat: 'https://raw.githubusercontent.com/Tonejs/Tone.js/dev/examples/audio/505/hho.mp3'
+      },
+      function() {
+        //sampler will repitch the closest sample
+      }
+    );
+    player.connect(gain);
+    // setInterval(() => {
+    //   player.get('kick').start();
+    // }, 1000);
+    this.state = { index: 0, synths, boxes: {}, sequencer: null, player };
   }
 
   componentDidMount() {
@@ -43,6 +58,16 @@ class Sequencer extends Component {
 
     sequencer.on('change', v => {
       console.log(v);
+      if (v.state === true) {
+        const sum = v.row * 16 + v.column;
+        const rem = Math.floor(sum / 4);
+        if (rem % 2 === 1) {
+          setTimeout(() => {
+            rects[sum].setAttribute('fill', '#C99C9E');
+          }, 0);
+        }
+      }
+
       if (v.state === false) {
         const sum = v.row * 16 + v.column;
         const rem = Math.floor(sum / 4);
@@ -84,22 +109,18 @@ class Sequencer extends Component {
   render() {
     const { sequencer } = this.state;
     // if (sequencer) console.log(this.state.sequencer);
-
+    const instruments = ['Kick', 'Clap', 'Hat', 'Snare'];
     return (
       <div className="sequencer_container">
-        <div className="sequencer_labels">
-          <div className="sequencer_label">
-            <span className="sequencer_label_text">Kick</span>
-          </div>
-          <div className="sequencer_label">
-            <span className="sequencer_label_text">Clap</span>
-          </div>
-          <div className="sequencer_label">
-            <span className="sequencer_label_text">Hat</span>
-          </div>
-          <div className="sequencer_label">
-            <span className="sequencer_label_text">Snare</span>
-          </div>
+        <div className="sequencer_side">
+          {instruments.map(i => (
+            <div className="sequencer_side_container" key={i}>
+              <div className="sequencer_label">
+                <span className="sequencer_label_text">{i}</span>
+              </div>
+              <div className="sequencer_indicator"></div>
+            </div>
+          ))}
         </div>
         <div id="sequencer" ref={this.seqRef}></div>
       </div>

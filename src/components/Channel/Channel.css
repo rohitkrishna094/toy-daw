@@ -1,0 +1,7 @@
+.channel {
+  display: flex;
+  flex-direction: column;
+  background-color: #3f484d;
+  width: 500px;
+  margin: 100px auto;
+}

@@ -1,0 +1,11 @@
+.channel-content-container {
+  background-color: #3f484d;
+  display: flex;
+  justify-content: center;
+}
+.channel-content {
+  background-color: #5f686d;
+  width: 98%;
+  border: 1px solid #2b3235;
+  /* box-shadow: 0px 2px 0px 0px #3f484d, 0px -1px 0px 0px #838383; */
+}
