@@ -1,7 +1,6 @@
 .sequencer_container {
   display: flex;
-  margin-top: 100px;
-  margin-left: 100px;
+  justify-content: center;
 }
 
 .sequencer_side {
@@ -21,6 +20,7 @@
 
 .sequencer_label {
   background-color: #535c61;
+  width: 40px;
   padding: 3px 20px;
   margin-bottom: 5px;
   border-radius: 5%;
@@ -37,6 +37,5 @@
 }
 
 .sequencer_side_container:first-child .sequencer_indicator {
-  /* background-color: #a8e44a; */
   border: 1px solid #a8e44a;
 }
