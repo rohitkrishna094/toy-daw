@@ -30,15 +30,17 @@ class Sequencer extends Component {
         // setInterval(() => {
         //   player.get('kick').start();
         // }, 1000);
-        this.state = { index: 0, synths, boxes: {}, sequencer: null, player };
+        this.state = { index: 0, synths, boxes: {}, sequencer: null, player, instruments: ['Kick', 'Clap', 'Hat', 'Snare', 'Kick', 'Clap', 'Hat', 'Snare'] };
     }
 
     componentDidMount() {
+        const rows = this.state.instruments.length;
+        const columns = 16;
         const sequencer = new Nexus.Sequencer('#sequencer', {
-            size: [400, 115],
+            size: [25 * columns, 28.75 * rows],
             mode: 'toggle',
-            rows: 4,
-            columns: 16
+            rows,
+            columns
         });
         sequencer.colorize('fill', '#51575B');
         sequencer.colorize('accent', '#AABAC4');
@@ -109,7 +111,7 @@ class Sequencer extends Component {
     render() {
         const { sequencer } = this.state;
         // if (sequencer) console.log(this.state.sequencer);
-        const instruments = ['Kick', 'Clap', 'Hat', 'Snare'];
+        const instruments = this.state.instruments;
         return (
             <div className="sequencer_container">
                 <div className="sequencer_side">
