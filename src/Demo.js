@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Tone from 'tone';
+import * as Tone from 'tone';
 import Nexus from 'nexusui';
 import { mapping } from './keymapping';
 
@@ -7,11 +7,13 @@ class Demo extends Component {
   constructor(props) {
     super(props);
     const octaveOffset = -1;
-    const synth = new Tone.PolySynth(6, Tone.Synth, {
-      oscillator: {
-        // type: 'sine'
-      }
-    }).toMaster();
+    const synth = new Tone.PolySynth().toDestination();
+    // const synth = new Tone.PolySynth(6, Tone.Synth, {
+    //   oscillator: {
+    //     // type: 'sine'
+    //   },
+    // }).toMaster();
+    synth.set({ oscillator: { type: 'sine' } });
     this.state = { keyMap: {}, synth, octaveOffset, noteMap: mapping(octaveOffset) };
   }
 
@@ -20,11 +22,11 @@ class Demo extends Component {
     document.addEventListener('keyup', this.onKeyUp);
 
     const dial = Nexus.Add.Dial('#instrument', {
-      size: [700, 100]
+      size: [700, 100],
     });
 
     const slider = Nexus.Add.Slider('#instrument', {
-      size: [25, 100]
+      size: [25, 100],
     });
 
     // then, to remove them tlater
@@ -32,7 +34,7 @@ class Demo extends Component {
     // slider.destroy();
   }
 
-  onKeyDown = e => {
+  onKeyDown = (e) => {
     const { keyMap } = this.state;
     const key = e.key.toUpperCase();
 
@@ -44,12 +46,12 @@ class Demo extends Component {
     this.setState({ ...this.state, keyMap: { ...keyMap, [key]: true } });
   };
 
-  onKeyUp = e => {
+  onKeyUp = (e) => {
     const key = e.key.toUpperCase();
     this.setState({ ...this.state, keyMap: { ...this.state.keyMap, [key]: false } });
   };
 
-  sing = letter => {
+  sing = (letter) => {
     const { synth } = this.state;
     const { noteMap } = this.state;
     if (letter.toUpperCase() in noteMap) {
@@ -58,7 +60,7 @@ class Demo extends Component {
     }
   };
 
-  pressedKeys = keyMap => {
+  pressedKeys = (keyMap) => {
     let res = [];
     for (let key in keyMap) {
       if (keyMap[key]) res.push(key);
@@ -66,7 +68,7 @@ class Demo extends Component {
     return res;
   };
 
-  pressedNotes = keyMap => {
+  pressedNotes = (keyMap) => {
     let res = [];
     const { noteMap } = this.state;
     for (let key in keyMap) {
