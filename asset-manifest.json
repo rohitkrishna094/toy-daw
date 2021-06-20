@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/toy-daw/static/css/main.3f3ee72c.chunk.css",
+    "main.js": "/toy-daw/static/js/main.83f52816.chunk.js",
+    "main.js.map": "/toy-daw/static/js/main.83f52816.chunk.js.map",
+    "runtime-main.js": "/toy-daw/static/js/runtime-main.0a172cdc.js",
+    "runtime-main.js.map": "/toy-daw/static/js/runtime-main.0a172cdc.js.map",
+    "static/js/2.a2450440.chunk.js": "/toy-daw/static/js/2.a2450440.chunk.js",
+    "static/js/2.a2450440.chunk.js.map": "/toy-daw/static/js/2.a2450440.chunk.js.map",
+    "index.html": "/toy-daw/index.html",
+    "static/css/main.3f3ee72c.chunk.css.map": "/toy-daw/static/css/main.3f3ee72c.chunk.css.map",
+    "static/js/2.a2450440.chunk.js.LICENSE.txt": "/toy-daw/static/js/2.a2450440.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.0a172cdc.js",
+    "static/js/2.a2450440.chunk.js",
+    "static/css/main.3f3ee72c.chunk.css",
+    "static/js/main.83f52816.chunk.js"
+  ]
+}
