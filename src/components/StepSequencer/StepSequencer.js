@@ -19,6 +19,7 @@ const StepSequencer = () => {
   const [play, setPlay] = useState(false);
   const [players, setPlayers] = useState();
   const [sequencer, setSequencer] = useState();
+  const [oscilloscope, setOscilloscope] = useState();
   const [volumeDial, setVolumeDial] = useState();
   const pianoRollRef = useRef();
   const [isStart, setIsStart] = useState(false);
@@ -30,6 +31,7 @@ const StepSequencer = () => {
   const [volNode, setVolNode] = useState();
   const seqRef = useRef();
   const volumeRef = useRef();
+  const oscilloscopeRef = useRef();
 
   useEffect(() => {
     // const players = new Tone.Players({
@@ -103,6 +105,18 @@ const StepSequencer = () => {
       setSequencer(undefined);
     };
   }, [seqRef]);
+
+  useEffect(() => {
+    const id = oscilloscopeRef.current;
+    const oscilloscope = new Nexus.Oscilloscope(id);
+    oscilloscope.connect(Tone.Destination);
+    setOscilloscope(oscilloscope);
+
+    return () => {
+      oscilloscope.destroy();
+      setOscilloscope(undefined);
+    };
+  }, [oscilloscopeRef]);
 
   useEffect(() => {
     const id = volumeRef.current.id;
@@ -197,6 +211,7 @@ const StepSequencer = () => {
           </SliderTrack>
           <SliderThumb />
         </Slider>
+        <Flex id="oscilloscope" ref={oscilloscopeRef}></Flex>
         <Button colorScheme="blue" onClick={onClick} pl={100} pr={100}>
           {play ? 'Pause' : 'Play'}
         </Button>
