@@ -2,7 +2,7 @@ import { Flex } from '@chakra-ui/react';
 import Nexus from 'nexusui';
 import React, { useEffect, useRef, useState } from 'react';
 
-const Dial = ({ id, min = -60, max = 5.6, value = 0, mode = 'relative', interaction = 'radial', size = [75, 75], onChange, uiProps }) => {
+const Dial = ({ min = -60, max = 5.6, value = 0, mode = 'relative', interaction = 'radial', size = [75, 75], onChange, uiProps }) => {
   const dialRef = useRef();
 
   useEffect(() => {
