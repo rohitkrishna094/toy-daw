@@ -4,6 +4,8 @@ import * as Tone from 'tone';
 import 'webaudio-pianoroll';
 import Nexus from 'nexusui';
 import './StepSequencer.scss';
+import Dial from '../core/Dial/Dial';
+import Oscilloscope from '../core/Oscilloscope/Oscilloscope';
 
 const defaultProps = {
   BPM: 120,
@@ -19,8 +21,6 @@ const StepSequencer = () => {
   const [play, setPlay] = useState(false);
   const [players, setPlayers] = useState();
   const [sequencer, setSequencer] = useState();
-  const [oscilloscope, setOscilloscope] = useState();
-  const [volumeDial, setVolumeDial] = useState();
   const pianoRollRef = useRef();
   const [isStart, setIsStart] = useState(false);
   const [BPM, setBPM] = useState(defaultProps.BPM);
@@ -30,10 +30,10 @@ const StepSequencer = () => {
   let [masterVolume, setMasterVolume] = useState(0.0);
   const [volNode, setVolNode] = useState();
   const seqRef = useRef();
-  const volumeRef = useRef();
-  const oscilloscopeRef = useRef();
 
   useEffect(() => {
+    const volNode = new Tone.Volume(masterVolume).toDestination();
+    setVolNode(volNode);
     // const players = new Tone.Players({
     //   urls: {
     //     0: 'A1.mp3',
@@ -43,9 +43,7 @@ const StepSequencer = () => {
     //   },
     //   fadeOut: '64n',
     //   baseUrl: 'https://tonejs.github.io/audio/casio/',
-    // }).toDestination();
-    const volNode = new Tone.Volume(masterVolume).toDestination();
-    setVolNode(volNode);
+    // }).connect(volNode);
     const players = new Tone.Players({
       urls: {
         0: 'kick.mp3',
@@ -106,38 +104,6 @@ const StepSequencer = () => {
     };
   }, [seqRef]);
 
-  useEffect(() => {
-    const id = oscilloscopeRef.current;
-    const oscilloscope = new Nexus.Oscilloscope(id);
-    oscilloscope.connect(Tone.Destination);
-    setOscilloscope(oscilloscope);
-
-    return () => {
-      oscilloscope.destroy();
-      setOscilloscope(undefined);
-    };
-  }, [oscilloscopeRef]);
-
-  useEffect(() => {
-    const id = volumeRef.current.id;
-    const dial = new Nexus.Dial(id, {
-      size: [75, 75],
-      interaction: 'radial', // "radial", "vertical", or "horizontal"
-      mode: 'relative', // "absolute" or "relative"
-      min: -60,
-      max: 5.6,
-      value: 0,
-    });
-    dial.on('change', (v) => {
-      setMasterVolume(v);
-    });
-
-    return () => {
-      setVolumeDial(undefined);
-      volumeDial.destroy();
-    };
-  }, [volumeRef]);
-
   const onClick = (e) => {
     if (!isStart) {
       Tone.start();
@@ -167,6 +133,7 @@ const StepSequencer = () => {
       });
 
       beat = (beat + 1) % columns;
+      // setBeat((beat + 1) % columns);
     };
 
     Tone.Transport.bpm.value = BPM;
@@ -211,11 +178,11 @@ const StepSequencer = () => {
           </SliderTrack>
           <SliderThumb />
         </Slider>
-        <Flex id="oscilloscope" ref={oscilloscopeRef}></Flex>
+        <Oscilloscope uiProps={{ id: 'oscilloscope' }} destination={Tone.Destination} />
         <Button colorScheme="blue" onClick={onClick} pl={100} pr={100}>
           {play ? 'Pause' : 'Play'}
         </Button>
-        <Flex id="volumne" mt={5} ref={volumeRef}></Flex>
+        <Dial onChange={(v) => setMasterVolume(v)} uiProps={{ id: 'volume', mt: 5 }} />
         <Flex id="sequencer" mt={5} ref={seqRef}></Flex>
       </Flex>
     </div>
