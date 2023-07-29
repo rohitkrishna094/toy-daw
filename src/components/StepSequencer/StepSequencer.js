@@ -6,7 +6,6 @@ import './StepSequencer.scss';
 import Dial from '../core/Dial/Dial';
 import Oscilloscope from '../core/Oscilloscope/Oscilloscope';
 import Draggable from 'react-draggable';
-import PianoRoll from '../core/PianoRoll/PianoRoll';
 
 const defaultProps = {
   BPM: 120,
@@ -22,7 +21,6 @@ const StepSequencer = () => {
   const [play, setPlay] = useState(false);
   const [players, setPlayers] = useState();
   const [sequencer, setSequencer] = useState();
-  const pianoRollRef = useRef();
   const [isStart, setIsStart] = useState(false);
   const [BPM, setBPM] = useState(defaultProps.BPM);
   const [rows, setRows] = useState(defaultProps.rows);
@@ -116,7 +114,6 @@ const StepSequencer = () => {
       Tone.Transport.start();
     } else {
       Tone.Transport.stop();
-      pianoRollRef.current.stop();
     }
     setPlay(!play);
   };
@@ -124,9 +121,6 @@ const StepSequencer = () => {
   const configLoop = (sequencer) => {
     const repeat = (time) => {
       sequencer.next();
-      pianoRollRef.current.play(Tone.getContext().rawContext, (ev) => {
-        console.log(ev);
-      });
       const grid = sequencer.matrix.pattern;
       grid.forEach((row, index) => {
         let synth = players.player(index);
@@ -150,7 +144,6 @@ const StepSequencer = () => {
   return (
     <Draggable bounds="parent" nodeRef={mainRef}>
       <Flex className="step-sequencer-container" ref={mainRef}>
-        <PianoRoll pianoRollRef={pianoRollRef} />
         <Flex flexDir="column" mt={5}>
           <h3>{BPM} BPM</h3>
           <Slider w="500px" defaultValue={defaultProps.BPM} min={defaultProps.minBPM} max={defaultProps.maxBPM} step={defaultProps.BPMStep} onChange={onBPMSliderChange}>
